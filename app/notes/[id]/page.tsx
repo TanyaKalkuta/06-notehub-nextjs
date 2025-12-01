@@ -15,9 +15,6 @@ export default async function NoteDetails({ params }: Props) {
   console.log('note id:', id);
   const queryClient = new QueryClient();
 
-  // 1. Отримуємо note
-  const note = await fetchNoteById(id);
-
   // 2. Префетч для кешу (не заміняє отримання note!)
   await queryClient.prefetchQuery({
     queryKey: ['note', id],
@@ -27,7 +24,7 @@ export default async function NoteDetails({ params }: Props) {
   // 2. Префетч для кешу (не заміняє отримання note!)
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
-      <NoteDetailsClient item={note} />
+      <NoteDetailsClient />
     </HydrationBoundary>
   );
 }
