@@ -12,6 +12,7 @@ interface NoteListProps {
 export default function NoteList({ notes }: NoteListProps) {
   const queryClient = useQueryClient();
   const { mutate } = useMutation({
+    mutationKey: ['notes'],
     mutationFn: deleteNote,
     onSuccess: () => {
       toast.success('Note deleted');
@@ -32,7 +33,9 @@ export default function NoteList({ notes }: NoteListProps) {
           <p className={css.content}>{note.content}</p>
           <div className={css.footer}>
             <span className={css.tag}>{note.tag}</span>
-            <Link href="/notes/{id}">View details</Link>
+            <Link className={css.link} href={`/notes/${note.id}`}>
+              View details
+            </Link>
             <button
               className={css.button}
               onClick={() => handleDelete(note.id)}

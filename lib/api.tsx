@@ -2,6 +2,7 @@ import axios from 'axios';
 import type { Note } from '../types/note';
 
 axios.defaults.baseURL = `https://notehub-public.goit.study/api`;
+const TOKEN = process.env.NEXT_PUBLIC_NOTEHUB_TOKEN;
 
 export interface FetchNotesParams {
   page?: number;
@@ -31,7 +32,7 @@ export default async function fetchNotes(
         search: params.search,
       },
       headers: {
-        Authorization: `Bearer ${process.env.NEXT_PUBLIC_NOTEHUB_TOKEN}`,
+        Authorization: `Bearer ${TOKEN}`,
       },
     });
     // 👇 тут ти побачиш, що приходить
@@ -47,7 +48,7 @@ export async function createNote(note: CreateNoteParams): Promise<Note> {
   try {
     const { data } = await axios.post<Note>('/notes', note, {
       headers: {
-        Authorization: `Bearer ${process.env.NEXT_PUBLIC_NOTEHUB_TOKEN}`,
+        Authorization: `Bearer ${TOKEN}`,
       },
     });
     console.log('CREATED NOTE:', data);
@@ -62,11 +63,25 @@ export async function deleteNote(id: string): Promise<Note> {
   try {
     const { data } = await axios.delete<Note>(`/notes/${id}`, {
       headers: {
-        Authorization: `Bearer ${process.env.NEXT_PUBLIC_NOTEHUB_TOKEN}`,
+        Authorization: `Bearer ${TOKEN}`,
       },
     });
     console.log('DELETED NOTE:', data);
     return data; // ✅ Повертаємо об'єкт видаленої нотатки
+  } catch (error) {
+    console.error('Error delete note:', error);
+    throw error;
+  }
+}
+
+export async function fetchNoteById(id: string) {
+  try {
+    const { data } = await axios.get<Note>(`/notes/${id}`, {
+      headers: {
+        Authorization: `Bearer ${TOKEN}`,
+      },
+    });
+    return data;
   } catch (error) {
     console.error('Error delete note:', error);
     throw error;

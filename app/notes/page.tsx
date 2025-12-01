@@ -15,7 +15,7 @@ import fetchNotes from '@/lib/api';
 
 function Notes() {
   const [search, setSearch] = useState('');
-  const [currentPage, setCurrentPage] = useState(1);
+  const [page, setPage] = useState(1);
   const [debounceValue] = useDebounce(search, 1000);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -23,10 +23,10 @@ function Notes() {
   const closeModal = () => setIsModalOpen(false);
 
   const { data, isLoading, isFetching, isError, isSuccess } = useQuery({
-    queryKey: ['notes', debounceValue, currentPage],
+    queryKey: ['notes', debounceValue, page],
     queryFn: () =>
       fetchNotes({
-        page: currentPage,
+        page: page,
         perPage: 12,
         search: debounceValue,
       }),
@@ -45,7 +45,7 @@ function Notes() {
           <SearchBox
             onChange={value => {
               setSearch(value);
-              setCurrentPage(1);
+              setPage(1);
             }}
           />
         }
@@ -55,8 +55,8 @@ function Notes() {
         {data && data.totalPages > 1 && (
           <Pagination
             totalPages={data.totalPages}
-            currentPage={currentPage}
-            onPageChange={setCurrentPage}
+            currentPage={page}
+            onPageChange={setPage}
           />
         )}
         <button className={css.button} onClick={openModal}>
