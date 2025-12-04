@@ -21,7 +21,6 @@ export default async function NoteDetails({ params }: Props) {
     queryFn: () => fetchNoteById(id),
   });
 
-  // 2. Префетч для кешу (не заміняє отримання note!)
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
       <NoteDetailsClient />
